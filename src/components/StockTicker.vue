@@ -5,7 +5,7 @@
       mx-auto
       bg-white
       dark:bg-black
-      flex
+      flexa
       shadow-md
       hover:shadow-xl
       items-center
@@ -22,15 +22,33 @@
       <img class="h-12 w-12" src="@/assets/aapl.jpeg" alt="ChitChat Logo" />
     </div>
     <div>
-      <div class="text-xl font-medium text-black">AAPL</div>
+      <div class="text-xl font-medium text-black">
+        <span>AAPL</span>
+        <arrow :className="iconClass"></arrow>
+      </div>
       <p class="text-gray-500">Current Price: $14</p>
     </div>
   </div>
 </template>
 
 <script>
+import Arrow from "./icons/ArrowIcon.vue";
+
 export default {
+  components: { Arrow },
   name: "StockTicker",
+  data() {
+    return {
+      increasedInValue: true,
+    };
+  },
+  computed: {
+    iconClass() {
+      return this.increasedInValue
+        ? "h-5 w-5 text-green-500"
+        : "h-5 w-5 text-red-500";
+    },
+  },
 };
 </script>
 

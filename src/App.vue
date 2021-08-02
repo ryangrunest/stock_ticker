@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <StockTicker></StockTicker>
+    <stock-ticker></stock-ticker>
   </div>
 </template>
 
@@ -8,10 +8,7 @@
 import StockTicker from "@/components/StockTicker.vue";
 
 export default {
-  name: "App",
   components: { StockTicker },
+  name: "App",
 };
 </script>
-
-<style>
-</style>
