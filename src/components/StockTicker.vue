@@ -42,8 +42,8 @@ export default {
   props: {
     authHeader: {
       type: String,
-      required: false, // change to true
-      default: "c445tlaad3iftpcmujr0", // remove this before building for prod
+      required: true,
+      default: "",
     },
   },
   data() {

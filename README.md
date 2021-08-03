@@ -5,6 +5,7 @@
 ## To Do
 
 - [ ] Finish README.
+- [ ] Deploy Demo application.
 - [ ] Deploy to Prod.
 - [ ] Add to NPM registry.
 - [ ] Write tests.
