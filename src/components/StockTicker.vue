@@ -9,30 +9,26 @@
       shadow-md
       hover:shadow-xl
       border-2
-      rounded-t rounded-l
+      rounded-bl-2xl rounded-tr-2xl rounded-tl-md
       fixed
       bottom-5
       right-5
+      w-50
       z-50
     "
     :class="borderColor"
   >
     <arrow :arrow="arrowUpOrDown" :className="iconClass"></arrow>
     <div
-      class="
-        text-xl
-        font-medium
-        text-black
-        flex flex-row
-        justify-start
-        width-full
-        m-0
-      "
+      class="text-xl font-medium flex flex-row justify-start width-full m-0"
+      :class="`${textColor}600`"
     >
       <img class="h-12" :src="stock.logo" alt="stock ticker logo" />
       <span class="self-end pl-1">{{ stock.symbol }}</span>
     </div>
-    <p class="text-gray-500 m-0">Current Price: $14</p>
+    <p class="mt-1" :class="`${textColor}500`">
+      Current Price: ${{ this.stock.currentPrice }}
+    </p>
   </div>
 </template>
 
@@ -55,8 +51,8 @@ export default {
       increasedInValue: true,
       stock: {
         symbol: "AAPL",
-        openPrice: 261.07,
-        currentPrice: 261.74,
+        openPrice: 0,
+        currentPrice: "...",
         logo: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.gSY2HU_gD2tnys1rdRmY1AHaIJ%26pid%3DApi&f=1",
       },
     };
@@ -73,16 +69,29 @@ export default {
     borderColor() {
       return this.increasedInValue ? "border-green-500" : "border-red-500";
     },
+    textColor() {
+      return this.increasedInValue ? "text-green-" : "text-red-";
+    },
   },
   mounted() {
-    this.updateStock();
+    if (!this.interval) {
+      this.interval = setInterval(() => {
+        this.updateStock();
+      }, 5000);
+    }
   },
   methods: {
     async updateStock() {
-      console.log("updating stock");
-      let { open, current } = await this.getStockInfo();
-      console.log(open, current);
-      //
+      let { current, open } = await this.getStockInfo();
+
+      this.stock.currentPrice = current;
+      this.stock.openPrice = open;
+
+      if (this.stock.openPrice >= this.stock.currentPrice) {
+        this.increasedInValue = false;
+      } else {
+        this.increasedInValue = true;
+      }
     },
     getStockInfo() {
       return new Promise((resolve, reject) => {
@@ -92,7 +101,6 @@ export default {
         };
         axios(config)
           .then((res) => {
-            console.log(res.data);
             resolve({ open: res.data.o, current: res.data.c });
           })
           .catch((err) => reject(err));
